@@ -3,6 +3,7 @@ import styles from "../styles/index.module.css";
 import classNames from "classnames/bind";
 import { Post } from "../App";
 import PostItem from "../components/PostItem";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -11,8 +12,17 @@ interface Props {
 }
 
 const Index: FC<Props> = ({ posts }) => {
+  const navigate = useNavigate();
+
   return (
     <>
+      <button
+        onClick={() => {
+          navigate("/write");
+        }}
+      >
+        작성하기
+      </button>
       <PostItem
         post={{
           id: "ID",
@@ -24,9 +34,11 @@ const Index: FC<Props> = ({ posts }) => {
           view: "조회수",
         }}
       ></PostItem>
-      {posts.map((value, index) => {
-        return <PostItem key={index} post={value}></PostItem>;
-      })}
+      {posts
+        .sort((a, b) => (b.id as number) - (a.id as number))
+        .map((value, index) => {
+          return <PostItem key={index} post={value}></PostItem>;
+        })}
     </>
   );
 };

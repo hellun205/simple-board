@@ -1,21 +1,23 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Post } from "../App";
 
 interface Props {
   findById(id: number): Post | undefined;
+  addView(id: number): void;
 }
 
-const PostPage: FC<Props> = ({ findById }) => {
+const PostPage: FC<Props> = ({ findById, addView }) => {
   const { id } = useParams();
   const postId = parseInt(id || "0");
   const post = findById(postId);
 
-  if (!post) {
-    return <h1>error 404</h1>;
-  }
+  useEffect(() => {
+    if (!post) return;
+    addView(postId);
+  }, []);
 
-  return (
+  return post ? (
     <div>
       <div>
         <h2>{post.title}</h2>
@@ -28,6 +30,8 @@ const PostPage: FC<Props> = ({ findById }) => {
         <div>{post.dislike}</div>
       </div>
     </div>
+  ) : (
+    <h1>error</h1>
   );
 };
 

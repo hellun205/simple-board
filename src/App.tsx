@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "./pages";
 import Write from "./pages/write";
 import PostPage from "./pages/post";
+import Header from "./components/Header";
 
 export interface Post {
   id: number | string;
@@ -49,17 +50,45 @@ function App() {
     return post.find((value) => value.id === id);
   };
 
+  const writePost = (title: string, content: string, author: string) => {
+    setPost([
+      ...post,
+      {
+        id: getNextId(),
+        title,
+        content,
+        author,
+        dislike: 0,
+        like: 0,
+        view: 0,
+      },
+    ]);
+  };
+
+  const addView = (id: number) => {
+    setPost([
+      ...post.filter((p) => p.id !== id),
+      {
+        ...post.filter((p) => p.id === id)[0],
+        view: (post.filter((p) => p.id === id)[0].view as number) + 1,
+      },
+    ]);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
         <div className="content">
-          <div className="header">simple board</div>
+          <Header></Header>
           <Routes>
             <Route path="/" element={<Index posts={post} />}></Route>
-            <Route path="/write" element={<Write />}></Route>
+            <Route
+              path="/write"
+              element={<Write writePost={writePost} />}
+            ></Route>
             <Route
               path="/post/:id"
-              element={<PostPage findById={findById} />}
+              element={<PostPage findById={findById} addView={addView} />}
             ></Route>
           </Routes>
         </div>

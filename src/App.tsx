@@ -3,7 +3,7 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "./pages";
 import Write from "./pages/write";
-import Post from "./pages/post";
+import PostPage from "./pages/post";
 
 export interface Post {
   id: number | string;
@@ -45,6 +45,10 @@ function App() {
     return id;
   };
 
+  const findById = (id: number): Post | undefined => {
+    return post.find((value) => value.id === id);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -53,7 +57,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Index posts={post} />}></Route>
             <Route path="/write" element={<Write />}></Route>
-            <Route path="/post" element={<Post />}></Route>
+            <Route
+              path="/post/:id"
+              element={<PostPage findById={findById} />}
+            ></Route>
           </Routes>
         </div>
       </BrowserRouter>

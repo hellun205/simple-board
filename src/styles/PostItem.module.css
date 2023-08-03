@@ -1,0 +1,37 @@
+.box {
+  display: flex;
+  border-bottom: 2px solid black;
+  height: 50px;
+  line-height: 50px;
+  user-select: none;
+
+}
+
+.select:hover {
+  cursor: pointer;
+  background-color: rgb(241, 241, 241);
+}
+
+.id {
+  width: 10%;
+}
+
+.title {
+  width: 60%;
+}
+
+.author {
+  width: 14%;
+}
+
+.view {
+  width: 8%;
+}
+
+.like {
+  width: 8%;
+}
+
+.bold {
+  font-weight: bold;
+}

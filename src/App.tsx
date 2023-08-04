@@ -5,6 +5,7 @@ import Index from "./pages";
 import Write from "./pages/write";
 import PostPage from "./pages/post";
 import Header from "./components/Header";
+import Edit from "./pages/edit";
 
 export interface Post {
   id: number | string;
@@ -95,6 +96,17 @@ function App() {
     ]);
   };
 
+  const editPost = (id: number, title: string, content: string) => {
+    setPost([
+      ...post.filter((p) => p.id !== id),
+      {
+        ...post.filter((p) => p.id === id)[0],
+        title: title,
+        content: content,
+      },
+    ]);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -116,6 +128,10 @@ function App() {
                   addLike={addLike}
                 />
               }
+            ></Route>
+            <Route
+              path="/edit/:id"
+              element={<Edit findById={findById} editPost={editPost} />}
             ></Route>
           </Routes>
         </div>

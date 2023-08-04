@@ -1,6 +1,6 @@
 .title-wrapper {
   display: flex;
-  line-height: 40px;
+  line-height: 50px;
 }
 
 .title {
@@ -17,7 +17,7 @@
   flex-direction: row-reverse;
 }
 
-.line {
+hr {
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -83,14 +83,20 @@
 .go-back-wrapper {
   display: flex;
   justify-content: center;
+
   margin-top: 10px;
 }
 
 .go-back-button {
   padding: 5px 20px 5px 20px;
-  margin: 0 auto;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 button {
   user-select: none;
+}
+
+h2 {
+  font-size: 24pt;
 }

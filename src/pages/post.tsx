@@ -58,6 +58,14 @@ const PostPage: FC<Props> = ({ findById, addView, addLike, addDisLike }) => {
         <button
           className={cx("go-back-button")}
           onClick={() => {
+            navigate(`/edit/${postId}`);
+          }}
+        >
+          수정하기
+        </button>
+        <button
+          className={cx("go-back-button")}
+          onClick={() => {
             navigate("/");
           }}
         >

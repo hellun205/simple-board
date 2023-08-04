@@ -1,0 +1,24 @@
+input {
+  padding: 5px;
+}
+
+textarea {
+  margin-top: 10px;
+  padding: 10px;
+  resize: none;
+  width: 100%;
+  height: 50%;
+}
+
+.wrapper {
+  height: 700px;
+}
+
+.author {
+  margin-right: 9px;
+  width: 20%;
+}
+
+.title {
+  width: 79%;
+}

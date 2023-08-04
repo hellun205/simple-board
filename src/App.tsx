@@ -75,6 +75,26 @@ function App() {
     ]);
   };
 
+  const addLike = (id: number) => {
+    setPost([
+      ...post.filter((p) => p.id !== id),
+      {
+        ...post.filter((p) => p.id === id)[0],
+        like: (post.filter((p) => p.id === id)[0].like as number) + 1,
+      },
+    ]);
+  };
+
+  const addDisLike = (id: number) => {
+    setPost([
+      ...post.filter((p) => p.id !== id),
+      {
+        ...post.filter((p) => p.id === id)[0],
+        dislike: (post.filter((p) => p.id === id)[0].dislike as number) + 1,
+      },
+    ]);
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -88,7 +108,14 @@ function App() {
             ></Route>
             <Route
               path="/post/:id"
-              element={<PostPage findById={findById} addView={addView} />}
+              element={
+                <PostPage
+                  findById={findById}
+                  addView={addView}
+                  addDisLike={addDisLike}
+                  addLike={addLike}
+                />
+              }
             ></Route>
           </Routes>
         </div>

@@ -1,0 +1,96 @@
+.title-wrapper {
+  display: flex;
+  line-height: 40px;
+}
+
+.title {
+  margin-right: 10px;
+  flex: auto;
+}
+
+.view {
+  user-select: none;
+}
+
+.author {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.line {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.content-text {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.like-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.like-buttons {
+  padding: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  border-radius: 10px;
+}
+
+.like-value {
+  font-weight: bold;
+  font-size: 20px;
+  user-select: none;
+}
+
+.like {
+  color: rgb(0, 132, 255);
+}
+
+.dislike {
+  color: rgb(179, 15, 15);
+}
+
+.like-btn {
+  border: 1px solid rgb(0, 132, 255);
+  background-color: rgb(223, 242, 255);
+}
+
+.like-btn:hover {
+  background-color: rgb(203, 234, 255);
+}
+
+.like-btn:active {
+  background-color: rgb(176, 223, 255);
+}
+
+.dislike-btn {
+  border: 1px solid rgb(179, 15, 15);
+  background-color: rgb(255, 233, 233);
+}
+
+.dislike-btn:hover {
+  background-color: rgb(255, 218, 218);
+}
+
+.dislike-btn:active {
+  background-color: rgb(255, 193, 193);
+}
+
+.go-back-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.go-back-button {
+  padding: 5px 20px 5px 20px;
+  margin: 0 auto;
+}
+
+button {
+  user-select: none;
+}

@@ -1,1 +1,1 @@
-# simple-board
+# simple board frontend

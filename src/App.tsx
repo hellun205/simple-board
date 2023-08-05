@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "./pages";
@@ -6,6 +6,7 @@ import Write from "./pages/write";
 import PostPage from "./pages/post";
 import Header from "./components/Header";
 import Edit from "./pages/edit";
+import axios from "axios";
 
 export interface Post {
   id: number | string;
@@ -13,98 +14,82 @@ export interface Post {
   content: string;
   author: string;
   view: number | string;
-  like: number | string;
-  dislike: number | string;
+  likes: number | string;
+  dislikes: number | string;
 }
 
 function App() {
-  const [post, setPost] = useState<Post[]>([
-    {
-      id: 0,
-      title: "test",
-      content: "asdf",
-      author: "sky",
-      view: 0,
-      like: 0,
-      dislike: 0,
-    },
-    {
-      id: 1,
-      title: "hello world",
-      content: "hi!",
-      author: "askdjald",
-      view: 152,
-      like: 7,
-      dislike: 2,
-    },
-  ]);
-
-  const [nextId, setNextId] = useState(post.length);
-
-  const getNextId = () => {
-    const id = nextId;
-    setNextId(nextId + 1);
-    return id;
+  const callApi = () => {
+    axios.get("/api").then((res) => {
+      console.log(res.data);
+    });
   };
 
-  const findById = (id: number): Post | undefined => {
-    return post.find((value) => value.id === id);
+  useEffect(() => {
+    callApi();
+  }, []);
+
+  const findById = (id: number): Promise<Post | undefined> => {
+    return new Promise<Post | undefined>((resolve) => {
+      axios
+        .post("/api/post/find-by-id", {
+          id,
+        })
+        .then((res) => resolve(res.data.data.post))
+        .catch(() => resolve(undefined));
+    });
   };
 
-  const writePost = (title: string, content: string, author: string) => {
-    setPost([
-      ...post,
-      {
-        id: getNextId(),
-        title,
-        content,
-        author,
-        dislike: 0,
-        like: 0,
-        view: 0,
-      },
-    ]);
+  const getPosts = (): Promise<Post[]> => {
+    return new Promise<Post[]>((resolve) => {
+      axios
+        .get("/api/post/get")
+        .then((res) => resolve(res.data.data.posts))
+        .catch(() => resolve([]));
+    });
+  };
+
+  const writePost = (
+    title: string,
+    content: string,
+    author: string
+  ): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+      axios
+        .post("/api/post/write", {
+          author,
+          title,
+          content,
+        })
+        .then((res) => resolve())
+        .catch(() => reject());
+    });
   };
 
   const addView = (id: number) => {
-    setPost([
-      ...post.filter((p) => p.id !== id),
-      {
-        ...post.filter((p) => p.id === id)[0],
-        view: (post.filter((p) => p.id === id)[0].view as number) + 1,
-      },
-    ]);
+    axios.post("/api/post/view", {
+      id,
+    });
   };
 
   const addLike = (id: number) => {
-    setPost([
-      ...post.filter((p) => p.id !== id),
-      {
-        ...post.filter((p) => p.id === id)[0],
-        like: (post.filter((p) => p.id === id)[0].like as number) + 1,
-      },
-    ]);
+    axios.post("/api/post/like", {
+      id,
+    });
   };
 
   const addDisLike = (id: number) => {
-    setPost([
-      ...post.filter((p) => p.id !== id),
-      {
-        ...post.filter((p) => p.id === id)[0],
-        dislike: (post.filter((p) => p.id === id)[0].dislike as number) + 1,
-      },
-    ]);
+    axios.post("/api/post/dislike", {
+      id,
+    });
   };
 
   const editPost = (id: number, title: string, content: string) => {
-    setPost([
-      ...post.filter((p) => p.id !== id),
-      {
-        ...post.filter((p) => p.id === id)[0],
-        title: title,
-        content: content,
-      },
-    ]);
+    axios.post("/api/post/update", {
+      id,
+      title,
+      content,
+    });
   };
 
   return (
@@ -113,7 +98,7 @@ function App() {
         <div className="content">
           <Header></Header>
           <Routes>
-            <Route path="/" element={<Index posts={post} />}></Route>
+            <Route path="/" element={<Index getPosts={getPosts} />}></Route>
             <Route
               path="/write"
               element={<Write writePost={writePost} />}

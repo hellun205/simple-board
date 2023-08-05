@@ -28,7 +28,7 @@ const PostItem: FC<Props> = ({ post }) => {
       <div className={cx("title")}>{post.title}</div>
       <div className={cx("author")}>{post.author}</div>
       <div className={cx("view")}>{post.view}</div>
-      <div className={cx("like")}>{post.like}</div>
+      <div className={cx("like")}>{post.likes}</div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Post } from "../App";
 import classNames from "classnames/bind";
@@ -7,7 +7,7 @@ import styles from "../styles/post.module.css";
 const cx = classNames.bind(styles);
 
 interface Props {
-  findById(id: number): Post | undefined;
+  findById(id: number): Promise<Post | undefined>;
   addView(id: number): void;
   addLike(id: number): void;
   addDisLike(id: number): void;
@@ -17,10 +17,28 @@ const PostPage: FC<Props> = ({ findById, addView, addLike, addDisLike }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const postId = parseInt(id || "0");
-  const post = findById(postId);
+
+  const [post, setPost] = useState<Post | undefined>(undefined);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [is404, setIs404] = useState(false);
+  const [like, setLike] = useState(0);
+  const [dislike, setDisLike] = useState(0);
+
+  if (!isLoaded) {
+    setIsLoaded(true);
+    findById(postId).then((p) => {
+      if (p) {
+        setLike(p.likes as number);
+        setDisLike(p.dislikes as number);
+        setPost(p);
+      } else {
+        setIs404(true);
+      }
+    });
+  }
 
   useEffect(() => {
-    if (!post) return;
+    if (is404) return;
     addView(postId);
   }, []);
 
@@ -38,19 +56,21 @@ const PostPage: FC<Props> = ({ findById, addView, addLike, addDisLike }) => {
         <button
           className={cx("like-buttons", "like-btn")}
           onClick={() => {
+            setLike(like + 1);
             addLike(postId);
           }}
         >
-          <div className={cx("like-value", "like")}>{post.like}</div>
+          <div className={cx("like-value", "like")}>{like}</div>
           좋아요
         </button>
         <button
           className={cx("like-buttons", "dislike-btn")}
           onClick={() => {
+            setDisLike(dislike + 1);
             addDisLike(postId);
           }}
         >
-          <div className={cx("like-value", "dislike")}>{post.dislike}</div>
+          <div className={cx("like-value", "dislike")}>{dislike}</div>
           싫어요
         </button>
       </div>
@@ -73,8 +93,10 @@ const PostPage: FC<Props> = ({ findById, addView, addLike, addDisLike }) => {
         </button>
       </div>
     </div>
+  ) : is404 ? (
+    <h1>error 404</h1>
   ) : (
-    <h1>error</h1>
+    <></>
   );
 };
 

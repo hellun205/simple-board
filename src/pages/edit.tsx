@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 interface Props {
-  findById: (id: number) => Post | undefined;
+  findById: (id: number) => Promise<Post | undefined>;
   editPost: (id: number, title: string, content: string) => void;
 }
 
@@ -15,10 +15,25 @@ const Edit: FC<Props> = ({ findById, editPost }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const postId = parseInt(id || "0");
-  const post = findById(postId);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
-  const [title, setTitle] = useState(post?.title);
-  const [content, setContent] = useState(post?.content);
+  const [post, setPost] = useState<Post | undefined>(undefined);
+  const [is404, setIs404] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  if (!isLoaded) {
+    findById(postId).then((p) => {
+      setIsLoaded(true);
+      if (p) {
+        setTitle(p.title);
+        setContent(p.content);
+        setPost(p);
+      } else {
+        setIs404(true);
+      }
+    });
+  }
 
   return post ? (
     <>
@@ -53,8 +68,10 @@ const Edit: FC<Props> = ({ findById, editPost }) => {
         </button>
       </div>
     </>
+  ) : is404 ? (
+    <h2>error: 404</h2>
   ) : (
-    <h1>error 404</h1>
+    <></>
   );
 };
 
